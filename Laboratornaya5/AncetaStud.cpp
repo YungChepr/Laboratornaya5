@@ -256,10 +256,24 @@ int AncetaStud::kolstud = 0; //Инициализация статического поля kolstud количеств
 void AncetaStud::inputstud() //Блок - ввод данных о студентах
 {   //gets_s(a//Тут this уже определенен//->fio);
     printf(" ФИО: ");
-    string fio;
-    std::cin >> fio;
-    //gets_s(fio);
-    setfio(fio);
+    char fio[N];
+    
+    try { //Блок проверяет ввод пустого ФИО
+        //std::cin >> fio;
+        gets_s(fio);
+
+        if (strcmp(fio,"") == 0)
+        {
+            throw "Ошибка, имя не может быть пустым!";
+        } 
+         //gets_s(fio);
+         setfio(string(fio));
+    } catch (const char* oshibka)
+    {
+        printf(" %s \n", oshibka);
+        return;
+    } 
+
 
     int nomerGrup;
     do {
@@ -273,15 +287,35 @@ void AncetaStud::inputstud() //Блок - ввод данных о студентах
     setnomerGrup(nomerGrup);
 
     int nomerStud;
-    do {
-        printf(" Номер студенческого(Введите в формате 7 цифр '2111851')\n");
-        while (scanf("%d", &nomerStud) != 1) //Проверка ввода если пользователь введет не цифру
+
+    try { //Блок проверяет ввод неуникального номера студентческого
+        do {
+            printf(" Номер студенческого(Введите в формате 7 цифр '2111851')\n");
+            while (scanf("%d", &nomerStud) != 1) //Проверка ввода если пользователь введет не цифру
+            {
+                while (getchar() != '\n');
+                printf("Ошибка. Введите число как показано в примере: ");
+            }
+        } while (nomerStud < 1000000 || nomerStud >9999999);
+
+        int i;
+        for (i = 0; i < AncetaStud::getkolstud(); i++)
         {
-            while (getchar() != '\n');
-            printf("Ошибка. Введите число как показано в примере: ");
+                if (spisokstud[i].getnomerStud() == nomerStud)
+                {
+                    throw "Ошибка, такой номер студенчесого уже существует!";
+                }
         }
-    } while (nomerStud < 1000000 || nomerStud >9999999);
-    setnomerStud(nomerStud);
+
+        setnomerStud(nomerStud);
+    }
+    catch (const char* oshibka)
+    {
+        printf(" %s \n", oshibka);
+        return;
+    }
+
+
 
     int reiting;
     do {
