@@ -5,24 +5,45 @@
 int main()
 {
     setlocale(LC_ALL, "RUS");
-    int a, //Переменная отвечающая за выбор строчки в меню
-        i;//Индекс массива студентов
-
-    spisokstud = new AncetaStud[N];
-    AncetaStud* spisokstud1[N]; //Указатель на массив в котором будут хранится указатели на объекты студентов
-    for (i = 0; i < N; i++)
+    int a = 0, //Переменная отвечающая за выбор строчки в меню
+        j = 0,
+        i = 0;//Индекс массива студентов
+    AncetaStud::k = 0; //Переменная отвечающая за выбор института
+    string nazvanieinstituta; //Переменная отвечающая за название института
+    //spisokstud = new AncetaStud[N];
+    
+        
+    for (j = 0; j < 3; j++)
     {
-        spisokstud1[i] = &(spisokstud[i]);
+        for (i = 0; i < N; i++)
+        {
+            spisokstud[j][i] = new AncetaStud;
+        }
+
     }
 
-    do {
+    AncetaStud* spisokstud1[N]; //Указатель на массив в котором будут хранится указатели на объекты студентов
+    for (i = 0; i < N; i++) //Присваиваем массиву указателей адреса элементов выбранного института
+    {
+        spisokstud1[i] = spisokstud[AncetaStud::k][i];
+    }
+    
+    //spisokstud[k][AncetaStud::getkolstud()]->initkolstud();
+
+    do{ 
+        nazvanieinstituta = AncetaStud::yznatinstitut(AncetaStud::k);
+        printf(" Текущий институт для записи студентов: институт ");
+        std::cout << nazvanieinstituta;
+        for (i = 0; i < N; i++) //Присваиваем массиву указателей адреса элементов выбранного института
+        {
+            spisokstud1[i] = spisokstud[AncetaStud::k][i];
+        }
         do {
             printf("\nВыберите действие в меню\n");
+            printf(" 0 - Выбор института для работы со студентами\n");
             printf(" 1 - Ввод данных о студентах (функция)\n");
             printf(" 2 - Удаление данных о студенте (функция)\n");
             printf(" 3 - Вывод данных о студентах\n");
-            printf(" 4 - Ввод данных о студентах (оператор)\n");
-            printf(" 5 - Удаление данных о студенте (оператор)\n");
             printf(" 6 - Поиск по имени среди студентов\n");
             printf(" 7 - Поиск по рейтингу среди cтудентов\n");
             printf(" 9 - Узнать количество студентов\n");
@@ -32,7 +53,25 @@ int main()
                 while (getchar() != '\n');
                 printf("Ошибка. Введите число от 1 до 7 включительно: ");
             }
-        } while ((a < 1) || (a > 10));
+        } while ((a < 0) || (a > 10));
+
+        if (a == 0)
+        {
+            printf("Выбор института для работы со студентами\n");
+            printf(" Введите 1 если хотите выбрать институт Химии\n");
+            printf(" Введите 2 если хотите выбрать институт Физики\n");
+            printf(" Введите 3 если хотите выбрать институт Экономики\n");
+            do {
+                printf("\n Введите число ");
+                while (scanf("%d", &AncetaStud::k) != 1) //Проверка ввода если пользователь введет введет не цифру
+                {
+                    while (getchar() != '\n');
+                    printf("Ошибка. Введите число от как показано в примере : ");
+                }
+                while (getchar() != '\n');
+            } while (AncetaStud::k < 1 || AncetaStud::k > 3);
+            AncetaStud::k--;
+        }
 
         if (a == 1)
         {
@@ -52,7 +91,7 @@ int main()
             {
                 if (AncetaStud::getkolstud() < N) {
                     printf("Студент %d \n", (AncetaStud::getkolstud() + 1));
-                    spisokstud[AncetaStud::getkolstud()].inputstud();
+                    spisokstud[AncetaStud::k][AncetaStud::getkolstud()]->inputstud();
                 }
                 else
                 {
@@ -68,7 +107,7 @@ int main()
             printf("Удаление данных о студенте(функция)\n");
             if (AncetaStud::getkolstud() != 0)
             {
-                spisokstud[0].deletestud(spisokstud1);
+                spisokstud[AncetaStud::k][0]->deletestud(spisokstud1);
             }
             else
             {
@@ -83,7 +122,7 @@ int main()
                 printf("Вывод данных о студентах\n");
                 for (i = 0; i < AncetaStud::getkolstud(); i++)
                 {
-                    spisokstud[i].outputstud();
+                    spisokstud[AncetaStud::k][i]->outputstud();
                 }
             }
             else
@@ -92,26 +131,6 @@ int main()
             }
         }
 
-        if (a == 4)
-        {
-            //printf("Студент %d \n", (AncetaStud::getkolstud() + 1));
-            //while (getchar() != '\n');
-            +spisokstud[AncetaStud::getkolstud() - 1];
-
-        }
-
-        if (a == 5)
-        {
-            printf("Удаление данных о студенте(оператор)\n");
-            if (AncetaStud::getkolstud() != 0)
-            {
-                ++spisokstud[AncetaStud::getkolstud() - 1];
-            }
-            else
-            {
-                printf("Сначала введите данные хотя бы об одном студенте\n");
-            }
-        }
 
         if (a == 6)
         {
@@ -169,7 +188,7 @@ int main()
     } while (a != 10);
     printf("\nВы вышли из системы\n");
 
-    delete[] spisokstud;
+    //delete[] spisokstud1;
 
 }
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

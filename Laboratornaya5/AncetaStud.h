@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <conio.h>
@@ -60,8 +59,9 @@ private:
         troechnik tro;
         dvoechnik dvo;
     }uch;
-    static int kolstud; //Статическое поле хранит количество студентов
+    static int kolstud[3]; //Статическое поле хранит количество студентов
 public:
+    static int k;
     AncetaStud(); //Конструктор без параметров
     AncetaStud(typchik type); //Конструктор с одним параметром
     AncetaStud(string fio, int nomerGrup, int nomerStud, int reiting, typchik type); //Конструктор со всеми параметрами
@@ -78,6 +78,7 @@ public:
     void setuch3(char stependia[N]); //Установка значений переменной uch
     void setuch4(char adres[N], char telephone[N]); //Установка значений переменной uch
     static void setkolstud(int kolstud); //Установка значений переменной kolstud
+    //void initkolstud();
 
     //char* getfio(); //Получение значений переменной fio
     string getfio(); //Получение значений переменной fio
@@ -90,6 +91,7 @@ public:
     void getuch3(char stependia[N]); //Получение значений переменной uch */
     void getuch4(char adres[N], char telephone[N]); //Получение значений переменной uch */
     static int getkolstud(); //Получение значений переменной kolstud
+    static string yznatinstitut(int k); //Получение названия института по коду
 
     void inputstud();  //Блок - ввод данных о студентах
     void outputstud(); //Блок - вывод данных о студентах
@@ -99,9 +101,10 @@ public:
     friend int searchbynamestud(AncetaStud* spisokstud[N], string с);
     friend int searchbyreiting(AncetaStud* spisokstud[N], int d);
 };
-//Блок перегрузки операторов
-AncetaStud operator++(AncetaStud& x, int unused); //Этот оператор прибавляет один объект
-AncetaStud operator++(AncetaStud& x); //Этот оператор удаляет один объект
-AncetaStud operator+(AncetaStud& x); //Этот оператор прибавляет несколько объектов
-extern AncetaStud* spisokstud; //Указатель на массив объектов типа AncetaStud ЧТОБЫ ВИДЕЛ ГЛОБАЛЬНУЮ ДОБАВЛЯЕМ EXTERN
 
+
+extern AncetaStud* spisokstud[3][N]; //Массив указателей на двуерный массив где храняться студенты ЧТОБЫ ВИДЕЛ ГЛОБАЛЬНУЮ ДОБАВЛЯЕМ EXTERN
+//extern int k; //Переменная отвечающая за выбор института
+//extern int kolstud;
+
+ 

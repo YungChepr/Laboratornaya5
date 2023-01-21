@@ -190,7 +190,7 @@ void AncetaStud::inputuch() //Установка значений переменной uch
         };
     }
 };
-void AncetaStud::setuch1(int razmer, char dopstependia[N]) //Установка значений переменной kolstud
+void AncetaStud::setuch1(int razmer, char dopstependia[N]) //Установка значений переменной uch1
 {
     strcpy(this->uch.otl.dopstependia, dopstependia);
     this->uch.otl.razmer = razmer;
@@ -203,7 +203,7 @@ int AncetaStud::getuch1(char dopstependia[N]) //Получение значений переменной uc
     return uch.otl.razmer;
 };
 
-void AncetaStud::setuch2(int razmer, char stependia[N]) //Установка значений переменной kolstud
+void AncetaStud::setuch2(int razmer, char stependia[N]) //Установка значений переменной uch2
 {
     strcpy(this->uch.hor.stependia, stependia);
     this->uch.hor.razmer = razmer;
@@ -216,7 +216,7 @@ int AncetaStud::getuch2(char stependia[N]) //Получение значений переменной uch
     return uch.hor.razmer;
 };
 
-void AncetaStud::setuch3(char stependia[N]) //Установка значений переменной kolstud
+void AncetaStud::setuch3(char stependia[N]) //Установка значений переменной uch3
 {
     strcpy(this->uch.tro.stependia, stependia);
 };
@@ -228,7 +228,7 @@ void AncetaStud::getuch3(char stependia[N]) //Получение значений переменной uch
 
 };
 
-void AncetaStud::setuch4(char adres[N], char telephone[N]) //Установка значений переменной kolstud
+void AncetaStud::setuch4(char adres[N], char telephone[N]) //Установка значений переменной uch4
 {
     strcpy(this->uch.dvo.adres, adres);
     strcpy(this->uch.dvo.telephone, telephone);
@@ -243,21 +243,51 @@ void AncetaStud::getuch4(char adres[N], char telephone[N]) //Получение значений 
 
 void AncetaStud::setkolstud(int kolst) //Установка значений переменной kolstud
 {
-    kolstud = kolst;
+    kolstud[k] = kolst;
 };
 
 int AncetaStud::getkolstud() //Получение значений переменной kolstud
 {
-    return kolstud;
+    return kolstud[k];
 };
 
-int AncetaStud::kolstud = 0; //Инициализация статического поля kolstud количество студентов должно быть равно 0
+int AncetaStud::kolstud[3] = { 0,0,0 };
+
+int AncetaStud::k = 0; //ЧТОБЫ ПОД СТАТИЧЕСКУЮ ПЕРЕМЕННУЮ ВЫДЕЛИЛАСЬ ПАМЯТЬ НУЖНО ОБЪЯВИТЬ ЕЕ В CPP ФАЙЛЕ
+
+/*void AncetaStud::initkolstud()
+{
+    for (k = 0; k++; k < 3) 
+    {
+        setkolstud(0);
+    }
+    k = 0;
+}; */
+
+string AncetaStud::yznatinstitut(int k) //Функция возвращает строку которая показывает выбранный институт
+{
+    string institut;
+    switch (k) 
+    {
+    case 0: 
+        institut = "Химии";
+        break;
+    case 1:
+        institut = "Физики";
+        break;
+    case 2:
+        institut = "Экономики";
+        break;
+    default:
+        institut = "Значение не определено!!!";
+    }
+    return institut;
+};
 
 void AncetaStud::inputstud() //Блок - ввод данных о студентах
 {   //gets_s(a//Тут this уже определенен//->fio);
     printf(" ФИО: ");
     char fio[N];
-    
     try { //Блок проверяет ввод пустого ФИО
         //std::cin >> fio;
         gets_s(fio);
@@ -301,7 +331,7 @@ void AncetaStud::inputstud() //Блок - ввод данных о студентах
         int i;
         for (i = 0; i < AncetaStud::getkolstud(); i++)
         {
-                if (spisokstud[i].getnomerStud() == nomerStud)
+                if (spisokstud[k][i]->getnomerStud() == nomerStud)
                 {
                     throw "Ошибка, такой номер студенчесого уже существует!";
                 }
@@ -543,7 +573,7 @@ int searchbynamestud(AncetaStud* spisokstud[N], string  c) //Блок - поиск по име
     int reiting;
     typchik type;
 
-    for (i = 0; i < AncetaStud::kolstud; i++)  //блок проверки запросов
+    for (i = 0; i < AncetaStud::getkolstud(); i++)  //блок проверки запросов
     {
         if (spisokstud[i] != NULL)
         {
@@ -617,7 +647,7 @@ int searchbyreiting(AncetaStud* spisokstud[N], int d) //Блок - поиск по рейтингу
     int nomerStud;
     int reiting;
     typchik type;
-    for (i = 0; i < AncetaStud::kolstud; i++)  //блок проверки запросов
+    for (i = 0; i < AncetaStud::getkolstud(); i++)  //блок проверки запросов
     {
         if (spisokstud[i] != NULL)
         {
@@ -683,94 +713,7 @@ int searchbyreiting(AncetaStud* spisokstud[N], int d) //Блок - поиск по рейтингу
     return f2;
 }
 
-AncetaStud operator++(AncetaStud& x, int unused) //Этот оператор прибавляет один объект
-{
-    printf(" ФИО: ");
-    string fio;
-    std::cin >> fio;
-    //gets_s(fio);
-    x.setfio(fio);
+//AncetaStud* spisokstud = NULL; //Определение указателя на массив студентов
+AncetaStud* spisokstud[3][N]; //Массив указателей на двуерный массив где храняться студенты
 
-    int nomerGrup;
-    do {
-        printf(" Номер группы:(Введите в формате 5 цифр '22091')\n");
-        while (scanf("%d", &nomerGrup) != 1) //Проверка ввода если пользователь введет не цифру
-        {
-            while (getchar() != '\n');
-            printf("Ошибка. Введите число от как показано в примере : ");
-        }
-    } while (nomerGrup < 10000 || nomerGrup >99999);
-    x.setnomerGrup(nomerGrup);
 
-    int nomerStud;
-    do {
-        printf(" Номер студенческого(Введите в формате 7 цифр '2111851')\n");
-        while (scanf("%d", &nomerStud) != 1) //Проверка ввода если пользователь введет не цифру
-        {
-            while (getchar() != '\n');
-            printf("Ошибка. Введите число как показано в примере: ");
-        }
-    } while (nomerStud < 1000000 || nomerStud >9999999);
-    x.setnomerStud(nomerStud);
-
-    int reiting;
-    do {
-        printf(" Рейтинг студента:(от 0 до 100) ");
-        while (scanf("%d", &reiting) != 1) //Проверка ввода если пользователь  введет не цифру
-        {
-            while (getchar() != '\n');
-            printf("Ошибка. Введите число как показано в примере: ");
-        }
-    } while ((reiting < 0) || (reiting > 100));
-    x.setreiting(reiting);
-
-    x.inputuch();
-    x.setkolstud(x.getkolstud() + 1); //Увеличиваем счетчик студентов на 1
-    printf("\n");
-    while (getchar() != '\n');
-    return x;
-}
-
-AncetaStud operator+(AncetaStud& x) //Этот оператор прибавляет несколько объектов
-{
-    printf("Ввод данных о студентах(оператор)\n");
-    int n, i;
-    do {
-        printf("\n Введите количество студентов n (n<%d): ", N);
-        while (scanf("%d", &n) != 1) //Проверка ввода если пользователь введет введет не цифру
-        {
-            while (getchar() != '\n');
-            printf("Ошибка. Введите число от как показано в примере : ");
-        }
-        while (getchar() != '\n');
-    } while (n < 1 || n > N);
-
-    for (i = 0; i < n; i++)
-    {
-        if (AncetaStud::getkolstud() < N) {
-            printf("Студент %d \n", (AncetaStud::getkolstud() + 1));
-            spisokstud[AncetaStud::getkolstud()]++;
-        }
-        else
-        {
-            printf("Количество студентов не может быть больше %d\n", N);
-            i = n;
-        }
-    }
-    return x;
-}
-
-AncetaStud operator++(AncetaStud& x) //Этот оператор прибавляет один объект
-{
-    AncetaStud* spisokstud1[N]; //Указатель на массив в котором будут хранится указатели на объекты студентов
-    int i;
-    for (i = 0; i < N; i++)
-    {
-        spisokstud1[i] = &(spisokstud[i]);
-    }
-
-    x.deletestud(spisokstud1);
-
-    return x;
-}
-AncetaStud* spisokstud = NULL;
