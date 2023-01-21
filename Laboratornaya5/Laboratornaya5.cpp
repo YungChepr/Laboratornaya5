@@ -1,13 +1,177 @@
 ﻿// Laboratornaya5.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
-
-#include <iostream>
+#include "AncetaStud.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
-}
+    setlocale(LC_ALL, "RUS");
+    int a, //Переменная отвечающая за выбор строчки в меню
+        i;//Индекс массива студентов
 
+    spisokstud = new AncetaStud[N];
+    AncetaStud* spisokstud1[N]; //Указатель на массив в котором будут хранится указатели на объекты студентов
+    for (i = 0; i < N; i++)
+    {
+        spisokstud1[i] = &(spisokstud[i]);
+    }
+
+    do {
+        do {
+            printf("\nВыберите действие в меню\n");
+            printf(" 1 - Ввод данных о студентах (функция)\n");
+            printf(" 2 - Удаление данных о студенте (функция)\n");
+            printf(" 3 - Вывод данных о студентах\n");
+            printf(" 4 - Ввод данных о студентах (оператор)\n");
+            printf(" 5 - Удаление данных о студенте (оператор)\n");
+            printf(" 6 - Поиск по имени среди студентов\n");
+            printf(" 7 - Поиск по рейтингу среди cтудентов\n");
+            printf(" 9 - Узнать количество студентов\n");
+            printf(" 10 - Выход из системы\n");
+            while (scanf("%d", &a) != 1) //Проверка ввода если пользователь  введет не цифру
+            {
+                while (getchar() != '\n');
+                printf("Ошибка. Введите число от 1 до 7 включительно: ");
+            }
+        } while ((a < 1) || (a > 10));
+
+        if (a == 1)
+        {
+            printf("Ввод данных о студентах(функция)\n");
+            int n;
+            do {
+                printf("\n Введите количество студентов n (n<%d): ", N);
+                while (scanf("%d", &n) != 1) //Проверка ввода если пользователь введет введет не цифру
+                {
+                    while (getchar() != '\n');
+                    printf("Ошибка. Введите число от как показано в примере : ");
+                }
+                while (getchar() != '\n');
+            } while (n < 1 || n > N);
+
+            for (i = 0; i < n; i++)
+            {
+                if (AncetaStud::getkolstud() < N) {
+                    printf("Студент %d \n", (AncetaStud::getkolstud() + 1));
+                    spisokstud[AncetaStud::getkolstud()].inputstud();
+                }
+                else
+                {
+                    printf("Количество студентов не может быть больше %d\n", N);
+                    i = n;
+                }
+            }
+
+        }
+
+        if (a == 2)
+        {
+            printf("Удаление данных о студенте(функция)\n");
+            if (AncetaStud::getkolstud() != 0)
+            {
+                spisokstud[0].deletestud(spisokstud1);
+            }
+            else
+            {
+                printf("Сначала введите данные хотя бы об одном студенте\n");
+            }
+        }
+
+        if (a == 3)
+        {
+            if (AncetaStud::getkolstud() != 0)
+            {
+                printf("Вывод данных о студентах\n");
+                for (i = 0; i < AncetaStud::getkolstud(); i++)
+                {
+                    spisokstud[i].outputstud();
+                }
+            }
+            else
+            {
+                printf("Сначала введите данные хотя бы об одном студенте\n");
+            }
+        }
+
+        if (a == 4)
+        {
+            //printf("Студент %d \n", (AncetaStud::getkolstud() + 1));
+            //while (getchar() != '\n');
+            +spisokstud[AncetaStud::getkolstud() - 1];
+
+        }
+
+        if (a == 5)
+        {
+            printf("Удаление данных о студенте(оператор)\n");
+            if (AncetaStud::getkolstud() != 0)
+            {
+                ++spisokstud[AncetaStud::getkolstud() - 1];
+            }
+            else
+            {
+                printf("Сначала введите данные хотя бы об одном студенте\n");
+            }
+        }
+
+        if (a == 6)
+        {
+
+            int f3 = 0;
+            if (AncetaStud::getkolstud() != 0)
+            {
+                char zap1[N];
+                printf("Поиск по имени среди студентов\n");
+                while (getchar() != '\n');
+                printf("Введите ФИО студента\n");
+                gets_s(zap1);
+                f3 = searchbynamestud(spisokstud1, zap1);
+                printf("\n Всего найдено студентов с таким именем: %d\n ", f3);
+
+            }
+            else
+            {
+                printf("Сначала введите данные хотя бы об одном студенте\n");
+            }
+
+        }
+
+        if (a == 7)
+        {
+            int f5 = 0;
+            if (AncetaStud::getkolstud() != 0)
+            {
+                int zap3;
+                printf("Поиск по рейтингу среди студентов\n");
+                while (getchar() != '\n');
+                printf("Введите рейтинг студента\n");
+                do {
+                    printf(" Рейтинг студента:(от 0 до 100) ");
+                    while (scanf("%d", &zap3) != 1) //Проверка ввода если пользователь  введет не цифру
+                    {
+                        while (getchar() != '\n');
+                        printf("Ошибка. Введите число как показано в примере: ");
+                    }
+                } while ((zap3 < 0) || (zap3 > 100));
+                f5 = searchbyreiting(spisokstud1, zap3);
+                printf("\n Всего найдено студентов с таким рейтингом: %d\n ", f5);
+
+            }
+            else
+            {
+                printf("Сначала введите данные хотя бы об одном студенте\n");
+            }
+        }
+
+        if (a == 9)
+        {
+            printf("Количество студентов = %d \n", AncetaStud::getkolstud());
+        }
+    } while (a != 10);
+    printf("\nВы вышли из системы\n");
+
+    delete[] spisokstud;
+
+}
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
 // Отладка программы: F5 или меню "Отладка" > "Запустить отладку"
 
